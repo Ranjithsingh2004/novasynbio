@@ -98,9 +98,14 @@ export default function Hero() {
           <TextReveal delay={0.4} className="text-text-primary block">
             Engineering the
           </TextReveal>
-          <TextReveal delay={0.6} className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent block pb-2">
+          <motion.span 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent inline-block pb-2"
+          >
             Future of Health
-          </TextReveal>
+          </motion.span>
         </h1>
 
         {/* Subtext */}
