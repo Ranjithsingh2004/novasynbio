@@ -20,7 +20,7 @@ export default function ParticleField() {
 
   const particles = useMemo(() => {
     if (dimensions.width === 0) return [];
-    const count = Math.min(60, Math.floor((dimensions.width * dimensions.height) / 25000));
+    const count = Math.min(30, Math.floor((dimensions.width * dimensions.height) / 40000));
     const ps: Particle[] = [];
     for (let i = 0; i < count; i++) {
       ps.push({
@@ -79,25 +79,6 @@ export default function ParticleField() {
 
         // (Old glow particle code removed)
       });
-
-      // Draw subtle connecting lines (organic dust network)
-      const connectionDistance = 150;
-      ctx.beginPath();
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < connectionDistance) {
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-          }
-        }
-      }
-      ctx.strokeStyle = `rgba(11, 27, 21, 0.03)`;
-      ctx.lineWidth = 0.5;
-      ctx.stroke();
 
       // Draw dust motes
       particles.forEach((particle) => {

@@ -102,7 +102,7 @@ export default function Capabilities() {
           {CAPABILITIES.map((cap, i) => (
             <div
               key={cap.title}
-              className="relative w-[320px] md:w-[400px] h-[450px] flex-shrink-0 p-8 rounded-3xl bg-surface/40 border border-border hover:border-primary/40 transition-all duration-500 group overflow-hidden flex flex-col"
+              className="relative w-[320px] md:w-[400px] h-[450px] flex-shrink-0 p-8 rounded-3xl bg-surface/40 border border-border hover:border-primary/40 transition-all duration-500 group overflow-hidden flex flex-col will-change-transform"
             >
               {/* Background glow */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
