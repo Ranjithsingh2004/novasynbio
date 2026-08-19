@@ -17,10 +17,11 @@ export default function ParticleField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const animationRef = useRef<number>(0);
+  const lastFrameTime = useRef<number>(0);
 
   const particles = useMemo(() => {
     if (dimensions.width === 0) return [];
-    const count = Math.min(30, Math.floor((dimensions.width * dimensions.height) / 40000));
+    const count = Math.min(20, Math.floor((dimensions.width * dimensions.height) / 60000));
     const ps: Particle[] = [];
     for (let i = 0; i < count; i++) {
       ps.push({
@@ -57,44 +58,45 @@ export default function ParticleField() {
     canvas.height = dimensions.height;
 
     let frame = 0;
+    const FRAME_INTERVAL = 1000 / 30; // Cap at 30fps — particles don't need 60fps
 
-    const animate = () => {
+    const animate = (timestamp: number) => {
+      // Throttle to 30fps
+      const elapsed = timestamp - lastFrameTime.current;
+      if (elapsed < FRAME_INTERVAL) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+      lastFrameTime.current = timestamp - (elapsed % FRAME_INTERVAL);
+      
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       frame++;
 
       particles.forEach((p) => {
-        // Update position
         p.x += p.speedX;
         p.y += p.speedY;
 
-        // Wrap around
         if (p.x < 0) p.x = canvas.width;
         if (p.x > canvas.width) p.x = 0;
         if (p.y < 0) p.y = canvas.height;
         if (p.y > canvas.height) p.y = 0;
-
-        // Pulse opacity
-        const pulse = Math.sin(frame * p.pulseSpeed + p.pulseOffset) * 0.3 + 0.7;
-        const currentOpacity = p.opacity * pulse;
-
-        // (Old glow particle code removed)
       });
 
       // Draw dust motes
       particles.forEach((particle) => {
         const pulse = Math.sin(frame * particle.pulseSpeed + particle.pulseOffset) * 0.3 + 0.7;
-        const currentAlpha = particle.opacity * pulse; // fixed from alpha to opacity
+        const currentAlpha = particle.opacity * pulse;
 
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         
         const colorSeed = (particle.x + particle.y) % 3;
         if (colorSeed < 1) {
-          ctx.fillStyle = `rgba(212, 175, 55, ${currentAlpha * 0.8})`; // Gold
+          ctx.fillStyle = `rgba(212, 175, 55, ${currentAlpha * 0.8})`;
         } else if (colorSeed < 2) {
-          ctx.fillStyle = `rgba(45, 74, 62, ${currentAlpha * 0.5})`; // Green
+          ctx.fillStyle = `rgba(45, 74, 62, ${currentAlpha * 0.5})`;
         } else {
-          ctx.fillStyle = `rgba(224, 122, 95, ${currentAlpha * 0.6})`; // Terracotta
+          ctx.fillStyle = `rgba(224, 122, 95, ${currentAlpha * 0.6})`;
         }
         
         ctx.fill();
@@ -103,7 +105,7 @@ export default function ParticleField() {
       animationRef.current = requestAnimationFrame(animate);
     };
 
-    animate();
+    animate(0);
 
     return () => {
       cancelAnimationFrame(animationRef.current);

@@ -59,7 +59,8 @@
 
 /* Global Reset & Base */
 html {
-  scroll-behavior: smooth;
+  /* Do NOT use scroll-behavior: smooth here — Lenis handles smooth scrolling.
+     Having both causes double-interpolation that makes trackpads feel heavy. */
   background-color: var(--color-background);
   color: var(--color-text-primary);
 }
@@ -97,11 +98,12 @@ body {
 @layer utilities {
   /* Tactile Glassmorphism - light, frosted, soft shadows */
   .glass {
-    @apply bg-white/70 backdrop-blur-md border border-border shadow-[0_8px_30px_rgb(0,0,0,0.04)];
+    @apply bg-white/95 border border-border shadow-[0_8px_30px_rgb(0,0,0,0.04)];
+    /* No backdrop-blur — it forces full-page GPU recompositing on fixed elements every scroll frame */
   }
 
   .glass-dark {
-    @apply bg-surface/80 backdrop-blur-lg border border-border shadow-[0_8px_32px_rgb(0,0,0,0.06)];
+    @apply bg-surface/95 border border-border shadow-[0_8px_32px_rgb(0,0,0,0.06)];
   }
 
   /* Subtle Text Gradients */

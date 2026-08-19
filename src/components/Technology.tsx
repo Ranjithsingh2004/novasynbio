@@ -87,7 +87,7 @@ export default function Technology() {
                 {["AI/ML", "CRISPR", "Multi-Omics", "Protein Engineering"].map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1 text-xs font-medium text-primary border border-primary/30 rounded-full bg-background/40 backdrop-blur-sm"
+                    className="px-3 py-1 text-xs font-medium text-primary border border-primary/30 rounded-full bg-background/80"
                   >
                     {tag}
                   </span>

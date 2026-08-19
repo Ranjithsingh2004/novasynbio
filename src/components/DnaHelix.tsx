@@ -1,20 +1,18 @@
 "use client";
 
 import { useRef, useMemo } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float, Points, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
 
 function DnaStrand() {
   const groupRef = useRef<THREE.Group>(null);
-  const strand1Ref = useRef<THREE.Group>(null);
-  const strand2Ref = useRef<THREE.Group>(null);
 
   const { positions1, positions2, connections } = useMemo(() => {
     const p1: [number, number, number][] = [];
     const p2: [number, number, number][] = [];
     const conn: { start: [number, number, number]; end: [number, number, number] }[] = [];
-    const numPoints = 40;
+    const numPoints = 30; // Reduced from 40
     const radius = 1.2;
     const height = 8;
     const turns = 2.5;
@@ -32,7 +30,7 @@ function DnaStrand() {
       p1.push([x1, y, z1]);
       p2.push([x2, y, z2]);
 
-      if (i % 3 === 0) {
+      if (i % 4 === 0) { // Reduced connections from every 3rd to every 4th
         conn.push({ start: [x1, y, z1], end: [x2, y, z2] });
       }
     }
@@ -51,20 +49,17 @@ function DnaStrand() {
     <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.5}>
       <group ref={groupRef}>
         {/* Strand 1 - Cyan */}
-        <group ref={strand1Ref}>
+        <group>
           {positions1.map((pos, i) => (
             <mesh key={`s1-${i}`} position={pos}>
-              <sphereGeometry args={[0.06, 12, 12]} />
-              <meshPhysicalMaterial
+              <sphereGeometry args={[0.06, 8, 8]} />
+              <meshBasicMaterial
                 color="#D4AF37"
-                roughness={0.4}
-                metalness={0.2}
                 transparent
                 opacity={0.9}
               />
             </mesh>
           ))}
-          {/* Connect strand 1 spheres with lines */}
           {positions1.slice(0, -1).map((pos, i) => {
             const next = positions1[i + 1];
             const mid: [number, number, number] = [
@@ -87,11 +82,9 @@ function DnaStrand() {
 
             return (
               <mesh key={`l1-${i}`} position={mid} quaternion={quat}>
-                <cylinderGeometry args={[0.015, 0.015, length, 6]} />
-                <meshPhysicalMaterial
+                <cylinderGeometry args={[0.015, 0.015, length, 4]} />
+                <meshBasicMaterial
                   color="#D4AF37"
-                  roughness={0.4}
-                  metalness={0.2}
                   transparent
                   opacity={0.6}
                 />
@@ -101,14 +94,12 @@ function DnaStrand() {
         </group>
 
         {/* Strand 2 - Purple */}
-        <group ref={strand2Ref}>
+        <group>
           {positions2.map((pos, i) => (
             <mesh key={`s2-${i}`} position={pos}>
-              <sphereGeometry args={[0.06, 12, 12]} />
-              <meshPhysicalMaterial
+              <sphereGeometry args={[0.06, 8, 8]} />
+              <meshBasicMaterial
                 color="#2D4A3E"
-                roughness={0.6}
-                metalness={0.1}
                 transparent
                 opacity={0.9}
               />
@@ -136,11 +127,9 @@ function DnaStrand() {
 
             return (
               <mesh key={`l2-${i}`} position={mid} quaternion={quat}>
-                <cylinderGeometry args={[0.015, 0.015, length, 6]} />
-                <meshPhysicalMaterial
+                <cylinderGeometry args={[0.015, 0.015, length, 4]} />
+                <meshBasicMaterial
                   color="#2D4A3E"
-                  roughness={0.6}
-                  metalness={0.1}
                   transparent
                   opacity={0.6}
                 />
@@ -174,10 +163,8 @@ function DnaStrand() {
           return (
             <mesh key={`conn-${i}`} position={mid} quaternion={quat}>
               <cylinderGeometry args={[0.01, 0.01, length, 4]} />
-              <meshPhysicalMaterial
+              <meshBasicMaterial
                 color="#E07A5F"
-                roughness={0.7}
-                metalness={0.1}
                 transparent
                 opacity={0.4}
               />
@@ -190,7 +177,7 @@ function DnaStrand() {
 }
 
 function BackgroundParticles() {
-  const count = 800;
+  const count = 400; // Reduced from 800
   const positions = useMemo(() => {
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
@@ -229,14 +216,14 @@ export default function DnaHelix() {
     <div className="absolute inset-0 z-0">
       <Canvas
         camera={{ position: [0, 0, 6], fov: 50 }}
-        dpr={[1, 2]}
+        dpr={[1, 1.5]}
         style={{ background: "transparent" }}
-        gl={{ alpha: true, antialias: true }}
+        gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
+        frameloop="always"
       >
         <ambientLight intensity={0.6} />
         <pointLight position={[5, 5, 5]} intensity={1.5} color="#D4AF37" />
         <pointLight position={[-5, -5, 5]} intensity={1} color="#E07A5F" />
-        <pointLight position={[0, 3, 3]} intensity={0.8} color="#FFFFFF" />
         <DnaStrand />
         <BackgroundParticles />
       </Canvas>

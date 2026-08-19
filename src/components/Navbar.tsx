@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { BRAND, NAV_LINKS } from "@/lib/constants";
 import Magnetic from "./Magnetic";
@@ -8,10 +8,16 @@ import Magnetic from "./Magnetic";
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const scrolledRef = useRef(false);
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    setScrolled(latest > 50);
+    // Only trigger a re-render when the boolean state actually changes
+    const isScrolled = latest > 50;
+    if (isScrolled !== scrolledRef.current) {
+      scrolledRef.current = isScrolled;
+      setScrolled(isScrolled);
+    }
   });
 
   // Close mobile menu on resize
@@ -132,7 +138,7 @@ export default function Navbar() {
         style={{ pointerEvents: mobileOpen ? "auto" : "none" }}
       >
         <div
-          className="absolute inset-0 bg-background/80 backdrop-blur-sm"
+          className="absolute inset-0 bg-background/80"
           onClick={() => setMobileOpen(false)}
         />
         <div className="absolute right-0 top-0 h-full w-72 bg-surface border-l border-border p-8 pt-24 flex flex-col gap-6">

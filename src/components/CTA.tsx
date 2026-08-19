@@ -48,7 +48,7 @@ export default function CTA() {
             </motion.div>
 
             <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              <TextReveal className="inline-block mr-3">Ready to</TextReveal>
+              <TextReveal className="inline-block mr-3 text-text-primary">Ready to</TextReveal>
               <motion.span 
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -59,7 +59,7 @@ export default function CTA() {
                 Transform
               </motion.span>
               <br />
-              <TextReveal delay={0.4} className="inline-block mt-2">Healthcare?</TextReveal>
+              <TextReveal delay={0.4} className="inline-block mt-2 text-text-primary">Healthcare?</TextReveal>
             </h2>
 
             <p className="text-text-muted text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
