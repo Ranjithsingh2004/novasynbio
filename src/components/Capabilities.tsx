@@ -58,30 +58,38 @@ export default function Capabilities() {
         return -(containerWidth - window.innerWidth + 200); // 200px buffer
       };
 
-      const tween = gsap.to(container, {
-        x: getScrollAmount,
-        ease: "none",
-        scrollTrigger: {
-          trigger: triggerRef.current,
-          start: "top top",
-          end: () => `+=${getScrollAmount() * -1}`,
-          pin: true,
-          scrub: 1,
-          invalidateOnRefresh: true,
-        },
+      const mm = gsap.matchMedia();
+
+      // Desktop animation: horizontal scroll pinning
+      mm.add("(min-width: 768px)", () => {
+        const tween = gsap.to(container, {
+          x: getScrollAmount,
+          ease: "none",
+          scrollTrigger: {
+            trigger: triggerRef.current,
+            start: "top top",
+            end: () => `+=${getScrollAmount() * -1}`,
+            pin: true,
+            scrub: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        return () => {
+          tween.kill();
+        };
       });
 
       return () => {
-        tween.kill();
-        ScrollTrigger.getAll().forEach(t => t.kill());
+        mm.revert();
       };
     }
   }, []);
 
   return (
-    <section id="capabilities" ref={triggerRef} className="relative bg-background overflow-hidden h-screen flex flex-col justify-center">
-      {/* Pinned Title Area with Gradient Mask */}
-      <div className="absolute top-0 left-0 w-full md:w-[45%] h-full px-6 md:px-16 z-10 flex flex-col justify-center pointer-events-none bg-gradient-to-r from-background via-background/95 to-transparent">
+    <section id="capabilities" ref={triggerRef} className="relative bg-background overflow-hidden md:h-screen flex flex-col justify-center py-24 md:py-0">
+      {/* Title Area with Gradient Mask (Pinned on Desktop) */}
+      <div className="md:absolute top-0 left-0 w-full md:w-[45%] h-auto md:h-full px-6 md:px-16 z-10 flex flex-col justify-center md:pointer-events-none md:bg-gradient-to-r from-background via-background/95 to-transparent mb-12 md:mb-0">
         <span className="text-primary text-sm font-medium tracking-[0.2em] uppercase block mb-4 mt-20 md:mt-0">
           What We Do
         </span>
@@ -103,8 +111,8 @@ export default function Capabilities() {
         </p>
       </div>
 
-      <div className="w-full overflow-hidden flex items-center mt-32">
-        <div ref={containerRef} className="flex gap-8 px-6 md:px-16 pl-[10vw] md:pl-[30vw] items-center">
+      <div className="w-full overflow-hidden flex items-center md:mt-32">
+        <div ref={containerRef} className="flex flex-col md:flex-row gap-8 px-6 md:px-16 md:pl-[30vw] items-center">
           {CAPABILITIES.map((cap, i) => (
             <div
               key={cap.title}
