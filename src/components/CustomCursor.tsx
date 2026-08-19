@@ -64,7 +64,7 @@ export default function CustomCursor() {
   return (
     <div
       ref={cursorRef}
-      className="fixed top-0 left-0 w-6 h-6 rounded-full border border-primary/50 pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 backdrop-blur-[2px] hidden md:block"
+      className="fixed top-0 left-0 w-6 h-6 rounded-full border border-primary/50 pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 hidden md:block"
     />
   );
 }
