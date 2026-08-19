@@ -57,9 +57,15 @@ export default function About() {
             </span>
             <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               <TextReveal className="inline-block mr-3">Pioneering</TextReveal>
-              <TextReveal delay={0.2} className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent inline-block pb-2">
+              <motion.span 
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent inline-block pb-2"
+              >
                 Innovation
-              </TextReveal>
+              </motion.span>
             </h2>
             <p className="text-text-muted text-lg max-w-3xl mx-auto leading-relaxed">
               At NovaSyn Biosciences, we converge artificial intelligence with molecular biology

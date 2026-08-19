@@ -74,7 +74,7 @@ export default function Hero() {
       <div className="absolute inset-0 z-[1] bg-gradient-to-r from-background/80 via-transparent to-background/80" />
 
       {/* 3D DNA Helix */}
-      <div className="absolute inset-0 z-[2]">
+      <div className="absolute inset-0 z-[2] pointer-events-none">
         <DnaHelix />
       </div>
 

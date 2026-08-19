@@ -49,9 +49,15 @@ export default function CTA() {
 
             <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               <TextReveal className="inline-block mr-3">Ready to</TextReveal>
-              <TextReveal delay={0.2} className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent inline-block pb-2">
+              <motion.span 
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent inline-block pb-2"
+              >
                 Transform
-              </TextReveal>
+              </motion.span>
               <br />
               <TextReveal delay={0.4} className="inline-block mt-2">Healthcare?</TextReveal>
             </h2>
